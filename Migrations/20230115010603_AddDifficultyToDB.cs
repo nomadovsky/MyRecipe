@@ -5,7 +5,7 @@
 namespace MyRecipe.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCategoryToDb : Migration
+    public partial class AddDifficultyToDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,6 +22,19 @@ namespace MyRecipe.Migrations
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Difficulty",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Difficulty", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -29,6 +42,9 @@ namespace MyRecipe.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Difficulty");
         }
     }
 }

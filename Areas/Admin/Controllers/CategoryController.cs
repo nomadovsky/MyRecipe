@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyRecipe.Data;
+using MyRecipe.DataAccess.Repository.IRepository;
 using MyRecipe.Models;
 
-namespace MyRecipe.Controllers
+namespace MyRecipe.Areas.Admin.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly AppDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(AppDbContext db)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            IEnumerable<Category> objCategoryList = _db.Categories.ToList();
+            IEnumerable<Category> objCategoryList = _unitOfWork.Category.GetAll();
             return View(objCategoryList);
         }
         public IActionResult Create()
@@ -26,15 +26,15 @@ namespace MyRecipe.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category obj)
         {
-            if (_db.Categories.Any(x => x.Name == obj.Name))
+            if (_unitOfWork.Category.GetFirstOrDefault(x => x.Name == obj.Name) != null)
             {
                 TempData["ErrorMessage"] = "This category already exists";
                 return View(obj);
             }
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
-                _db.SaveChanges();
+                _unitOfWork.Category.Add(obj);
+                _unitOfWork.Save();
                 TempData["SuccessMessage"] = $"Category: '{obj.Name}' has been added successfully";
                 return RedirectToAction("Index");
             }
@@ -48,7 +48,9 @@ namespace MyRecipe.Controllers
             {
                 return NotFound();
             }
-            var category = _db.Categories.Find(id);
+            //var category = _unitOfWork.Category.Categories.Find(id);
+            var category = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
+
 
             if (category == null) { return NotFound(); }
             return View(category);
@@ -58,15 +60,15 @@ namespace MyRecipe.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Category obj)
         {
-            if (_db.Categories.Any(x => x.Name == obj.Name))
+            if (_unitOfWork.Category.GetFirstOrDefault(x => x.Name == obj.Name) != null)
             {
                 TempData["ErrorMessage"] = "This category already exists";
                 return View(obj);
             }
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _unitOfWork.Category.Update(obj);
+                _unitOfWork.Save();
                 TempData["SuccessMessage"] = $"Category: '{obj.Name}' has been changed successfully";
                 return RedirectToAction("Index");
             }
@@ -77,10 +79,10 @@ namespace MyRecipe.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            var category = _db.Categories.Find(id);
+            var category = _unitOfWork.Category.GetFirstOrDefault(u => u.Id == id);
             if (category == null) { return NotFound(); }
-            _db.Categories.Remove(category);
-            _db.SaveChanges();
+            _unitOfWork.Category.Remove(category);
+            _unitOfWork.Save();
             TempData["SuccessMessage"] = $"Category: '{category.Name}' has been deleted";
             return RedirectToAction("Index");
         }

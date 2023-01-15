@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyRecipe.Data;
+using MyRecipe.DataAccess.Data;
 
 #nullable disable
 
 namespace MyRecipe.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230107215734_AddCategoryToDb")]
-    partial class AddCategoryToDb
+    [Migration("20230115010603_AddDifficultyToDB")]
+    partial class AddDifficultyToDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,24 @@ namespace MyRecipe.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("MyRecipe.Models.Difficulty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Difficulty");
                 });
 #pragma warning restore 612, 618
         }

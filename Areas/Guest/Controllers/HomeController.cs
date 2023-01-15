@@ -2,7 +2,7 @@
 using MyRecipe.Models;
 using System.Diagnostics;
 
-namespace MyRecipe.Controllers
+namespace MyRecipe.Areas.Guest.Controllers
 {
     public class HomeController : Controller
     {
