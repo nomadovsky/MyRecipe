@@ -1,8 +1,36 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<MyRecipe.Models.Recipe>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="row pb-3">
+	@foreach (var recipe in Model)
+	{
+		<div class="col-sm-12">
+			<div class="row p-2 mx-auto">
+				<div class="col-9 p-1 mx-auto" style="border:1px solid #008cba; border-radius: 5px;">
+					<div class="card mx-auto">
+						<div class="col-md-6 mx-auto">
+							<div class="col-md-12">
+								<img src="@recipe.ImageUrl" class="card-img-top rounded img-fluid img-cover" />
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="pl-1">
+								<p class="card-title h5 text-primary">@recipe.Title</p>
+								<p class="card-title text-info">by <b>@recipe.ApplicationUser</b></p>
+								<p class="card-text"><small class="text-muted">Created: <b>@recipe.Created.ToString("dd MMMM yyyy")</b></small></p>
+								<p class="card-text">Difficulty: <b>@recipe.Difficulty.Name</b></p>
+								<p class="card-text">Category: <b>@recipe.Category.Name</b></p>
+							</div>
+
+						</div>
+					</div>
+					<div>
+						<a asp-action="Details" class="btn btn-primary form-control" asp-route-id="@recipe.Id">
+							Read more
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
 </div>

@@ -1,0 +1,56 @@
+﻿@model MyRecipe.Models.ViewModels.RecipeVM
+
+<form method="post" asp-action="Create" enctype="multipart/form-data">
+    <input asp-for="Recipe.Id" hidden />
+    <input asp-for="Recipe.ImageUrl" hidden />
+    <div class="border border-primary rounded p-3 mt-4">
+        <div class="row pb-2">
+            <h2>Add Recipe</h2>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Recipe.Title"></label>
+            <input asp-for="Recipe.Title" class="form-control" />
+            <span asp-validation-for="Recipe.Title" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Recipe.Description"></label>
+            <textarea asp-for="Recipe.Description" rows="5" class="form-control"></textarea>
+            <span asp-validation-for="Recipe.Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Recipe.ImageUrl"></label>
+            <input type="file" asp-for="Recipe.ImageUrl" name="file" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Recipe.CategoryId"></label>
+            <select asp-for="Recipe.CategoryId" asp-items="@Model.CategoryList" class="form-select">
+                <option disabled selected>Select Category</option>
+            </select>
+            <span asp-validation-for="Recipe.CategoryId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Recipe.DifficultyId"></label>
+            <select asp-for="Recipe.DifficultyId" asp-items="@Model.DifficultyList" class="form-select">
+                <option disabled selected>Select Difficulty</option>
+            </select>
+            <span asp-validation-for="Recipe.DifficultyId" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:10em">Add</button>
+        <a asp-controller="Recipe" asp-action="Index" class="btn btn-outline-secondary" style="width:10em">Back</a>
+    </div>
+
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+        <script>
+            tinymce.init({
+                selector: 'textarea',
+                plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                toolbar_mode: 'floating',
+            });
+        </script>
+    }
+}

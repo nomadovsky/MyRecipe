@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyRecipe.DataAccess.Repository.IRepository;
 using MyRecipe.Models;
+using MyRecipe.Utility;
 
 namespace MyRecipe.Areas.Admin.Controllers;
 [Area("Admin")]
+[Authorize(Roles = SD.Role_Admin)]
+
 public class DifficultyController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;

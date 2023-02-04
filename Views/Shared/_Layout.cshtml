@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using MyRecipe.Utility;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="~/MyRecipe.styles.css" asp-append-version="true" />
 </head>
 <body>
@@ -24,19 +26,26 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Guest" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        @if(User.IsInRole(SD.Role_Admin)){
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin Panel</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-area="Admin" asp-controller="Difficulty" asp-action="Index">Difficulty</a>
                                 <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Category</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Recipe" asp-action="Index">Recipes</a>
                             </div>
                         </li>
+                        }
                     </ul>
+                    @if(User.IsInRole(SD.Role_User) || User.IsInRole(SD.Role_Admin))
+                    {
+                        <form class="d-flex">
+                            <button asp-area="User" asp-area="Admin" asp-controller="Recipe" asp-action="Create"
+                                class="btn btn-secondary my-2 my-sm-0" type="submit">
+                            Add Recipe
+                        </button>
+                    </form>}
                     <partial name="_LoginPartial"/>
-                    <form class="d-flex">
-                        <input class="form-control me-sm-2" type="search" placeholder="Search">
-                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                    </form>
                 </div>
             </div>
         </nav>
@@ -56,7 +65,13 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.3.1/tinymce.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
